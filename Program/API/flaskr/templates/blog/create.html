@@ -2,6 +2,9 @@
 
 {% block header %}
   <h1>{% block title %}New Post{% endblock %}</h1>
+  {% if g.user %}
+    <a class="action" href="{{ url_for('blog.index') }}">Back</a>
+  {% endif %}  
 {% endblock %}
 
 {% block content %}
@@ -15,7 +18,7 @@
 
     <label for="amount">Amount</label>
     <input name="amount" id="amount" value="{{ request.form['amount'] }}" required>   
-    
+
     <input type="submit" value="Save">
   </form>
 {% endblock %}

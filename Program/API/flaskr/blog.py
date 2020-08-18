@@ -12,7 +12,7 @@ def index():
 
     db = get_db()
     posts = db.execute(
-        'SELECT p.id, title, body, created, author_id, username, amount'
+        'SELECT p.id, title, body, created, author_id, username, amount, status_of_request'
         ' FROM post p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC'
     ).fetchall()
@@ -28,6 +28,7 @@ def create():
         title = request.form['title']
         body = request.form['body']
         amount = request.form['amount']
+        status_of_request = 'Unfilled'
         error = None
 
         if not title:
@@ -46,9 +47,9 @@ def create():
         else:
             db = get_db()
             db.execute(
-                'INSERT INTO post (title, body, amount, author_id)'
-                ' VALUES (?, ?, ?, ?)',
-                (title, body, amount, g.user['id'])
+                'INSERT INTO post (title, body, amount, status_of_request, author_id)'
+                ' VALUES (?, ?, ?, ?, ?)',
+                (title, body, amount, status_of_request, g.user['id'])
             )
             # commit to DB            
             db.commit()
@@ -61,7 +62,7 @@ def get_post(id, check_author=True):
     """ Generic get post func. Eg. Update or Delete. """
 
     post = get_db().execute(
-        'SELECT p.id, title, body, created, author_id, username'
+        'SELECT p.id, title, body, created, author_id, username, amount, status_of_request'
         ' FROM post p JOIN user u ON p.author_id = u.id'
         ' WHERE p.id = ?',
         (id,)
@@ -74,6 +75,24 @@ def get_post(id, check_author=True):
         abort(403)
 
     return post
+
+def get_post_no_check(id, check_author=True):
+    """ Generic get post func without corresponding user ID. 
+        Do not use for editing, only for viewing. 
+        Returns one post in a list. """
+
+    post = get_db().execute(
+        'SELECT p.id, title, body, created, author_id, username, amount, status_of_request'
+        ' FROM post p JOIN user u ON p.author_id = u.id'
+        ' WHERE p.id = ?',
+        (id,)
+    ).fetchone()
+
+    if post is None:
+        abort(404, "Post id {0} doesn't exist.".format(id))
+
+    dum = [post]
+    return dum 
 
 @bp.route('/<int:id>/update', methods=('GET', 'POST'))
 @login_required
@@ -118,23 +137,26 @@ def delete(id):
 
 
 # incomplete
-@bp.route('/<int:id>/payment', methods=('GET', 'POST'))
+# @bp.route('/<int:id>/payment', methods=('GET', 'POST'))
+@bp.route('/<int:id>/payment')
 @login_required
 def payment(id):
-    post = get_post(id)
+    """ Takes to page with one post and allows equal amount to be loaned. """
 
-    if request.method == 'POST':
-        amount = request.form['amount']
-        error = None    
+    posts = get_post_no_check(id)
 
-        if not amount:
-            error = 'Amount is required.'
+    # if request.method == 'POST':
+    #     amount = request.form['amount']
+    #     error = None    
 
-        if error is not None:
-            flash(error)
-        else:
-            return redirect(url_for('blog.index'))      
+    #     if not amount:
+    #         error = 'Amount is required.'
 
-    return render_template('blog/payment.html', post=post)               
+    #     if error is not None:
+    #         flash(error)
+    #     else:
+    #         return redirect(url_for('blog.index'))   
+
+    return render_template('blog/payment.html', posts=posts)               
 
     
