@@ -38,7 +38,7 @@ def create():
             error = 'Amount is required.'
 
         try:
-            float(amount)
+            amount = float(amount)
         except ValueError:
             error = 'Invalid amount.'
 
@@ -169,7 +169,7 @@ def payment(id):
             #     error = 'Amount incorrect.'
 
             try:
-                float(loan_amount)
+                loan_amount = float(loan_amount)
             except ValueError:
                 error = 'Invalid amount.'
 

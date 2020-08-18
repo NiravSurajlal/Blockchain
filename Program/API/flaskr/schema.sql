@@ -14,7 +14,7 @@ CREATE TABLE post (
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   title TEXT NOT NULL,
   body TEXT NOT NULL,
-  amount INTEGER NOT NULL,
+  amount FLOAT NOT NULL,
   status_of_request TEXT NOT NULL,
   FOREIGN KEY (author_id) REFERENCES user (id)
 );
@@ -25,7 +25,7 @@ CREATE TABLE loan (
   other_username TEXT NOT NULL,
   request_post_id INTEGER NOT NULL,
   pay_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  loan_amount INTEGER NOT NULL,
+  loan_amount FLOAT NOT NULL,
   money_type TEXT NOT NULL,
   FOREIGN KEY (loan_author_id) REFERENCES user (id)
 );
