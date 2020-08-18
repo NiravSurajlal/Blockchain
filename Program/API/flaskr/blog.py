@@ -8,6 +8,8 @@ bp = Blueprint('blog', __name__)
 
 @bp.route('/')
 def index():
+    """ Index page for posts. """
+
     db = get_db()
     posts = db.execute(
         'SELECT p.id, title, body, created, author_id, username'
@@ -17,8 +19,11 @@ def index():
     return render_template('blog/index.html', posts=posts)
 
 @bp.route('/create', methods=('GET', 'POST'))
+# login required auth decorator
 @login_required
 def create():
+    """ Allows creation of post. Requires authentication to post. """
+
     if request.method == 'POST':
         title = request.form['title']
         body = request.form['body']
@@ -36,12 +41,16 @@ def create():
                 ' VALUES (?, ?, ?)',
                 (title, body, g.user['id'])
             )
+            # commit to DB            
             db.commit()
+            # redirect back to index page            
             return redirect(url_for('blog.index'))
 
     return render_template('blog/create.html')
 
 def get_post(id, check_author=True):
+    """ Generic get post func. Eg. Update or Delete. """
+
     post = get_db().execute(
         'SELECT p.id, title, body, created, author_id, username'
         ' FROM post p JOIN user u ON p.author_id = u.id'
@@ -59,7 +68,10 @@ def get_post(id, check_author=True):
 
 @bp.route('/<int:id>/update', methods=('GET', 'POST'))
 @login_required
+# takes in a ID which corres to the <int:id> in the route, also see index.html
 def update(id):
+    """ Allows update of post. Requires authentication to post. """
+
     post = get_post(id)
 
     if request.method == 'POST':
@@ -87,9 +99,17 @@ def update(id):
 @bp.route('/<int:id>/delete', methods=('POST',))
 @login_required
 def delete(id):
+    """ Allows deletion of post. Just a button in 'UPDATE'. """
+        
     get_post(id)
     db = get_db()
     db.execute('DELETE FROM post WHERE id = ?', (id,))
     db.commit()
     return redirect(url_for('blog.index'))
+
+# @bp.route('/<int:id>/payment', methods=('GET', 'POST'))
+# @login_required
+# def give_loan(id):
+#     post = get_post(id)
+
     
