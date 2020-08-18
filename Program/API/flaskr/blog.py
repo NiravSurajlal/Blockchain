@@ -28,7 +28,7 @@ def create():
         title = request.form['title']
         body = request.form['body']
         amount = request.form['amount']
-        status_of_request = 'Unfilled'
+        status_of_request = 'UNFILLED'
         error = None
 
         if not title:
@@ -101,6 +101,11 @@ def update(id):
     """ Allows update of post. Requires authentication to post. """
 
     post = get_post(id)
+    
+    # prevents editing if already satisfied 
+    availability = post['status_of_request']
+    if availability == 'FILLED':
+        return render_template('blog/unavailable.html')
 
     if request.method == 'POST':
         title = request.form['title']
@@ -135,19 +140,55 @@ def delete(id):
     db.commit()
     return redirect(url_for('blog.index'))
 
-
 # incomplete
-# @bp.route('/<int:id>/payment', methods=('GET', 'POST'))
-@bp.route('/<int:id>/payment')
+@bp.route('/<int:id>/payment', methods=('GET', 'POST'))
+# @bp.route('/<int:id>/payment')
 @login_required
 def payment(id):
     """ Takes to page with one post and allows equal amount to be loaned. """
 
     posts = get_post_no_check(id)
+    other_id = posts[0]['author_id']
+    other_post_id = posts[0]['id']
+    availability = posts[0]['status_of_request']
 
-    # if request.method == 'POST':
-    #     amount = request.form['amount']
-    #     error = None    
+    if availability == 'FILLED':
+        return render_template('blog/unavailable.html')
+
+    if request.method == 'POST':
+        if availability == 'UNFILLED':
+            amount = request.form['amount']
+            money_type = 'PAYMENT'
+            error = None    
+
+            if not amount:
+                error = 'Amount is required.'
+            if amount != posts[0]['amount']:
+                error = 'Amount incorrect.'
+
+            try:
+                float(amount)
+            except ValueError:
+                error = 'Invalid amount.'
+
+            if error is not None:
+                flash(error)
+            else:
+                db = get_db()
+                db.execute(
+                    'INSERT INTO loans (amount, money_type, other_id, other_post_id, author_id)'
+                    ' VALUES (?, ?, ?, ?, ?)',
+                    (amount, money_type, other_id, other_post_id, g.user['id'])
+                )
+                # commit to DB            
+                db.commit()
+
+                # update status
+                update_status(id)
+                # redirect back to index page            
+                return redirect(url_for('blog.index'))   
+        else:
+            return render_template('blog/unavailable.html')
 
     #     if not amount:
     #         error = 'Amount is required.'
@@ -159,4 +200,17 @@ def payment(id):
 
     return render_template('blog/payment.html', posts=posts)               
 
+def update_status(id):
+    """ Updates status of post. Requires authentication to post. """
     
+    s_dum = 'FILLED'
+    db = get_db()
+    db.execute(
+        'UPDATE post SET status_of_request = ?'
+        ' WHERE id = ?',
+        (s_dum, id)
+    )
+    db.commit()
+
+    
+
