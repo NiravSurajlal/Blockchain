@@ -148,8 +148,10 @@ def payment(id):
     """ Takes to page with one post and allows equal amount to be loaned. """
 
     posts = get_post_no_check(id)
-    other_id = posts[0]['author_id']
-    other_post_id = posts[0]['id']
+    # username of postee
+    other_username = posts[0]['username']
+    # post number
+    request_post_id = posts[0]['id']
     availability = posts[0]['status_of_request']
 
     if availability == 'FILLED':
@@ -157,17 +159,17 @@ def payment(id):
 
     if request.method == 'POST':
         if availability == 'UNFILLED':
-            amount = request.form['amount']
+            loan_amount = request.form['amount']
             money_type = 'PAYMENT'
             error = None    
 
-            if not amount:
+            if not loan_amount:
                 error = 'Amount is required.'
-            if amount != posts[0]['amount']:
-                error = 'Amount incorrect.'
+            # if amount != posts[0]['amount']:
+            #     error = 'Amount incorrect.'
 
             try:
-                float(amount)
+                float(loan_amount)
             except ValueError:
                 error = 'Invalid amount.'
 
@@ -176,27 +178,20 @@ def payment(id):
             else:
                 db = get_db()
                 db.execute(
-                    'INSERT INTO loans (amount, money_type, other_id, other_post_id, author_id)'
+                    'INSERT INTO loan (loan_amount, money_type, other_username, request_post_id, loan_author_id)'
                     ' VALUES (?, ?, ?, ?, ?)',
-                    (amount, money_type, other_id, other_post_id, g.user['id'])
+                    (loan_amount, money_type, other_username, request_post_id, g.user['id'])
                 )
                 # commit to DB            
                 db.commit()
-
+                
                 # update status
                 update_status(id)
+
                 # redirect back to index page            
                 return redirect(url_for('blog.index'))   
         else:
             return render_template('blog/unavailable.html')
-
-    #     if not amount:
-    #         error = 'Amount is required.'
-
-    #     if error is not None:
-    #         flash(error)
-    #     else:
-    #         return redirect(url_for('blog.index'))   
 
     return render_template('blog/payment.html', posts=posts)               
 

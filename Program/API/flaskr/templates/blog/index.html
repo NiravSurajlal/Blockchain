@@ -5,6 +5,9 @@
   {% if g.user %}
     <a class="action" href="{{ url_for('blog.create') }}">New</a>
   {% endif %}
+  {% if g.user %}
+  <a class="action" href="{{ url_for('info.mypages') }}">My Pages</a>
+{% endif %}
 {% endblock %}
 
 {% block content %}

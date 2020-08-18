@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}My Account{% endblock %}</h1>
+  {% if g.user %}
+  <a class="action" href="{{ url_for('blog.index') }}">Back</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% for loan in loans %}
+    <article class="post">
+      <header>
+        <div>
+          {% if g.user['id'] == loan['loan_author_id'] %}  
+          <h1>Payment</h1>
+          <div class="about">to {{ loan['other_username'] }} on {{ loan['pay_time'].strftime('%Y-%m-%d') }}</div>
+          {% endif %}
+          {% if g.user['id'] != loan['loan_author_id'] %}  
+          <h1>Loan Recieved</h1>
+          <div class="about">from {{ loan['username'] }} on {{ loan['pay_time'].strftime('%Y-%m-%d') }}</div>
+          {% endif %}          
+        </div>
+      </header>
+      <p class="body">Amount: {{ loan['loan_amount'] }}</p>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}

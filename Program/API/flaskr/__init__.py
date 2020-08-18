@@ -40,6 +40,9 @@ def create_app(test_config=None):
     app.register_blueprint(blog.bp)
     # no URL prefix, thus, 'index' URL becomes /    
     app.add_url_rule('/', endpoint='index')
+
+    from . import info 
+    app.register_blueprint(info.bp) 
     
     return app
  

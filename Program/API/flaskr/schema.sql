@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS post;
-DROP TABLE IF EXISTS loans;
+DROP TABLE IF EXISTS loan;
 
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -19,13 +19,13 @@ CREATE TABLE post (
   FOREIGN KEY (author_id) REFERENCES user (id)
 );
 
-CREATE TABLE loans (
+CREATE TABLE loan (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  author_id INTEGER NOT NULL,
-  other_id INTEGER NOT NULL,
-  other_post_id INTEGER NOT NULL,
+  loan_author_id INTEGER NOT NULL,
+  other_username TEXT NOT NULL,
+  request_post_id INTEGER NOT NULL,
   pay_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  amount INTEGER NOT NULL,
+  loan_amount INTEGER NOT NULL,
   money_type TEXT NOT NULL,
-  FOREIGN KEY (author_id) REFERENCES user (id)
+  FOREIGN KEY (loan_author_id) REFERENCES user (id)
 );
