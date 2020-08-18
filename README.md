@@ -26,6 +26,7 @@ Blockchain
 					|_ login.html
 				|_ transac
 					|_ transaction.html
+					|_ mining.html
 				|_ base.html
 			|_ static
 				|_  style.css

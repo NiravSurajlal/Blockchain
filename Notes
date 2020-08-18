@@ -1,0 +1,11 @@
+https://stackoverflow.com/questions/61033693/what-does-it-mean-to-register-a-blueprint-into-the-app-in-flask 
+
+Routing: See auth.py register function. See blog.py, update for 'requires and argument'. 
+
+Session: is a dict that stores data across requests. When validation succeeds, the user’s id is stored 
+in a new session. The data is stored in a cookie that is sent to the browser, and the browser then sends
+it back with subsequent requests. Flask securely signs the data so that it can’t be tampered with.
+See auth.py login function. 
+
+Endpoint: Name associated witha view is called an endpoint.
+
