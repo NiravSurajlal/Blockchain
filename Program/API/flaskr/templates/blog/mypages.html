@@ -14,11 +14,11 @@
         <div>
           {% if g.user['id'] == loan['loan_author_id'] %}  
           <h1>Payment</h1>
-          <div class="about">to {{ loan['other_username'] }} on {{ loan['pay_time'].strftime('%Y-%m-%d') }}</div>
+          <div class="about">to {{ loan['other_username'] }} on {{ loan['pay_time'].strftime('%Y-%m-%d') }} at {{ loan['pay_time'].strftime('%H:%M:%S') }}</div>
           {% endif %}
           {% if g.user['id'] != loan['loan_author_id'] %}  
           <h1>Loan Recieved</h1>
-          <div class="about">from {{ loan['username'] }} on {{ loan['pay_time'].strftime('%Y-%m-%d') }}</div>
+          <div class="about">from {{ loan['username'] }} on {{ loan['pay_time'].strftime('%Y-%m-%d') }} at {{ loan['pay_time'].strftime('%H:%M:%S') }}</div>
           {% endif %}          
         </div>
       </header>

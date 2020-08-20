@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS post;
 DROP TABLE IF EXISTS loan;
+DROP TABLE IF EXISTS transactions;
 
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -29,3 +30,9 @@ CREATE TABLE loan (
   money_type TEXT NOT NULL,
   FOREIGN KEY (loan_author_id) REFERENCES user (id)
 );
+
+CREATE TABLE transactions (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  hashed_transac TEXT NOT NULL,
+  amnt FLOAT NOT NULL
+)

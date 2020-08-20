@@ -9,3 +9,62 @@ See auth.py login function.
 
 Endpoint: Name associated witha view is called an endpoint.
 
+
+________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+ADDITIONS TO API
+________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+- The posts need to be a brief header, which takes to another page with details.
+- Each user will require a User and Post ID columns for who they pay 
+- Each user will require a  status column of their post 
+- Every post needs to have a 'Give a Loan' button that can be clicked by everyone.
+- This takes to a page where the terms can be seen.
+- Another button to confirm transaction which will add it to the blockchain. 
+- Should update DB, indicate satisfied, and not allow further loans. 
+
+________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+BLOCKCHAIN
+________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+Add block to sql database (not to py obj)
+Block should consist of:                        |Using loan SQL table?
+    - block index (on chain)                    |- id
+    - unique user ID, username or id (use id)   |- loan_author_id and request_post_id
+    - transaction amount                        |
+    - timestamp of transaction                  |
+    - hash of previous block                    |
+    - nonce                                     |
+
+    - chained_status
+    - hash of itself
+    (SQL)
+    - FOREIGN KEY (block_author_id) REFERENCES user (id)
+
+Blockchain should consist of:
+-
+    (SQL)
+    - FOREIGN KEY (blockchain_author_id) REFERENCES individual_block (block_author_id)
+
+Merkle Trees:
+    - https://www.codementor.io/blog/merkle-trees-5h9arzd3n8 
+    - Requires DB each block with hashes of each transaction and one for actual chain
+        -> stores all hashes 
+        -> counts number in it (2 for now)
+        -> stores root hash  
+
+Genesis Block:
+    - Add to init_db() in db.py
+    - First block and first block appended to chain 
+    - Also remember to add X for # of transactions in Blocks, i.e. initialise Block/ Blockchain 
+        - Add to Genesis Block class and set here  
+
+________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+SECURITY
+________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+- Need encryption of data going to and for
+- Encrypt data when select 'Give' so that username etc is encrypted 
+
