@@ -181,9 +181,9 @@ def payment(id):
             else:
                 db = get_db()
                 db.execute(
-                    'INSERT INTO loan (loan_amount, money_type, other_username, request_post_id, loan_author_id)'
-                    ' VALUES (?, ?, ?, ?, ?)',
-                    (loan_amount, money_type, other_username, request_post_id, g.user['id'])
+                    'INSERT INTO single_transaction (loan_amount, money_type, loan_reciever_username, request_post_id, loan_giver_id, hashed_transac)'
+                    ' VALUES (?, ?, ?, ?, ?, ?)',
+                    (loan_amount, money_type, other_username, request_post_id, g.user['id'], 'UNHASHED')
                 )
                 db.commit()
                 

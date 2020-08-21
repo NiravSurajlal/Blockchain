@@ -53,6 +53,7 @@ Merkle Trees:
         -> stores all hashes 
         -> counts number in it (2 for now)
         -> stores root hash  
+    - using time.time() for time in hash, should use from DB (datetime not json viable)
 
 Genesis Block:
     - Add to init_db() in db.py
@@ -67,4 +68,7 @@ ________________________________________________________________________________
 
 - Need encryption of data going to and for
 - Encrypt data when select 'Give' so that username etc is encrypted 
+
+
+
 

@@ -11,16 +11,16 @@ def mypages():
 
     db = get_db()
     loans = db.execute(
-        'SELECT l.id, loan_author_id, other_username, request_post_id, pay_time, username, loan_amount, money_type'
-        ' FROM loan l JOIN user u ON l.loan_author_id = u.id'
-        ' ORDER BY pay_time DESC'
+        'SELECT s.id, loan_giver_id, loan_reciever_username, request_post_id, payment_time, username, loan_amount, money_type'
+        ' FROM single_transaction s JOIN user u ON s.loan_giver_id = u.id'
+        ' ORDER BY payment_time DESC'
     ).fetchall()
 
     loans_list = []
     for i in loans:
         if i['username'] == g.user['username']:
             loans_list.append(i)
-        if i['other_username'] == g.user['username']:
+        if i['loan_reciever_username'] == g.user['username']:
             loans_list.append(i)    
 
     return render_template('blog/mypages.html', loans=loans_list)       

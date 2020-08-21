@@ -30,17 +30,24 @@ def ht_fxn():
 
     db = get_db()
     transac = db.execute(
-        'SELECT request_post_id, loan_author_id, other_username, loan_amount, pay_time'
-        ' FROM loan'
-        ' ORDER BY pay_time DESC'
+        'SELECT request_post_id, loan_giver_id, loan_reciever_username, loan_amount, id'
+        ' FROM single_transaction'
+        ' ORDER BY payment_time DESC'
     ).fetchall()
 
     transac_obj = SingleTransaction(transac[0][0], transac[0][1], transac[0][2], transac[0][3], time.time())
     hashed_transac = transac_obj.single_transaction_hasher()
+    id_ = int(transac[0][4])
+    # db.execute(
+    #     'INSERT INTO transactions (hashed_transac, amnt, transaction_id)'
+    #     ' VALUES (?, ?, ?)',
+    #     (str(hashed_transac), float(transac[0][3]), transac[0][5])
+    # )       
+    # db.commit()
 
     db.execute(
-        'INSERT INTO transactions (hashed_transac, amnt)'
-        ' VALUES (?, ?)',
-        (str(hashed_transac), float(transac[0][3]))
-    )       
+        'UPDATE single_transaction SET hashed_transac = ?'
+        ' WHERE id = ?',
+        (str(hashed_transac), id_)
+    )
     db.commit()
