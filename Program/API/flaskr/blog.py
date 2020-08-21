@@ -3,7 +3,7 @@ from werkzeug.exceptions import abort
 
 from flaskr.auth import login_required
 from flaskr.db import get_db
-from . import hash_transaction as ht 
+from flaskr.hash_transaction import ht_fxn 
 
 import pdb
 
@@ -185,11 +185,10 @@ def payment(id):
                     ' VALUES (?, ?, ?, ?, ?)',
                     (loan_amount, money_type, other_username, request_post_id, g.user['id'])
                 )
-                # commit to DB            
                 db.commit()
                 
-                # hasher
-                hash_transac()
+                # hashes single transac and adds to db
+                ht_fxn()
                 
                 # update status
                 update_status(id)
@@ -213,26 +212,7 @@ def update_status(id):
     )
     db.commit()
 
-def hash_transac():
-    ### Get single one | get unique id to identify
-    """ Hashes transaction and stores in DB. """    
 
-    db = get_db()
-    transac = db.execute(
-        'SELECT request_post_id, loan_author_id, other_username, loan_amount, pay_time'
-        ' FROM loan'
-        ' ORDER BY pay_time DESC'
-    ).fetchall()
-
-    one_transac_obj = ht.ht_fxn(transac[0][0], transac[0][1], transac[0][2], transac[0][3], transac[0][4])
-    hashed_transac = one_transac_obj.single_transaction_hasher()
-
-    db.execute(
-        'INSERT INTO transactions (hashed_transac, amount)'
-        ' VALUES (?, ?)',
-        (hashed_transac, transac[0][3])
-    )       
-    db.commit()
 
     
 
