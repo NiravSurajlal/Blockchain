@@ -61,6 +61,9 @@ Genesis Block:
     - Also remember to add X for # of transactions in Blocks, i.e. initialise Block/ Blockchain 
         - Add to Genesis Block class and set here  
 
+Implementation:
+    - linked individual block AUTOINCREMENT INT id with the block on the blockchain  
+
 ________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 
 SECURITY
@@ -69,6 +72,33 @@ ________________________________________________________________________________
 - Need encryption of data going to and for
 - Encrypt data when select 'Give' so that username etc is encrypted 
 
+________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 
+Script Descriptions
+________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+__init__
+    Starting Script which import and runs everything
+
+db 
+    sets up the database
+
+auth
+    register and login pages 
+
+blog 
+    page of all posts
+
+info
+    page displaying all users incoming and outgoing payments
+
+hash_transaction
+    hashes individual transactions
+
+blocks
+    creates the individual blocks with hashed transactions and stores in DB
+
+blockchain
+    the blockchain
 
 

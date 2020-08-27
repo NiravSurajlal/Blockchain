@@ -3,7 +3,7 @@ from werkzeug.exceptions import abort
 
 from flaskr.auth import login_required
 from flaskr.db import get_db
-from flaskr.hash_transaction import ht_fxn 
+from flaskr.hash_transaction import hash_transac_fxn 
 
 import pdb
 
@@ -188,7 +188,7 @@ def payment(id):
                 db.commit()
                 
                 # hashes single transac and adds to db
-                ht_fxn()
+                hash_transac_fxn()
                 
                 # update status
                 update_status(id)

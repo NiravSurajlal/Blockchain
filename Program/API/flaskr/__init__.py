@@ -23,15 +23,11 @@ def create_app(test_config=None):
     except OSError:
         # (if it exists already)        
         pass
-    
-    # simple hello world page
-    # creates connection between URL/hello abd a function which returns 'Hello World'
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World'
+
     
     from . import db
     db.init_app(app)
+    db.init_genesis(app)
 
     from . import auth
     app.register_blueprint(auth.bp)  

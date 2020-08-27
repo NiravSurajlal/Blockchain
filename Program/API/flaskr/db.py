@@ -1,5 +1,6 @@
 import sqlite3
 import click
+# from flaskr.hash_transaction import genesis_block 
 
 # g (proxy) is a namespace obj were elements are stored
 # current_app is a proxy for the app handling the current request (easier to use than importing app)
@@ -54,3 +55,13 @@ def init_app(app):
     app.teardown_appcontext(close_db)
     # adds new CLI command useable with command flask 
     app.cli.add_command(init_db_command)
+
+@click.command('generate-genesis')
+@with_appcontext
+def generate_genesis_block_command():    
+    # generate genesis block
+    from flaskr.hash_transaction import genesis_block
+    genesis_block()
+
+def init_genesis(app):
+    app.cli.add_command(generate_genesis_block_command)
