@@ -2,6 +2,7 @@ from hashlib import sha512
 import json
 from flaskr.db import get_db
 import time
+from flaskr.blockchain import next_block_intialisation, add_to_block 
 
 class SingleTransaction:
     def __init__(self, post_id, giver_of_loan, reciever_of_loan, loan_amount, transaction_time):
