@@ -48,11 +48,9 @@ CREATE TABLE genesis_block (
 CREATE TABLE individual_block (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   hash1 TEXT,
-  hash2 TEXT,
   prev_block_hash TEXT,
   filled_time FLOAT,
-  chained_status TEXT, 
-  no_in_block INTEGER NOT NULL
+  chained_status TEXT
 );
 
 CREATE TABLE blockchain (
