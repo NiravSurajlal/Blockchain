@@ -52,8 +52,18 @@ def add_to_block(current_transaction_hash):
 
     # CHAINED does not work for genesis block 
 
-    if len(transactions_in_block) > 2 or blocks[0][2] != 'CHAINED':
-        next_block_intialisation()
+    # if len(transactions_in_block) > 2 or blocks[0][2] != 'CHAINED':
+    if len(transactions_in_block) > 1:
+        next_block_intialisation(current_transaction_hash, db)
+        # json_transactions_in_block = json.dumps(current_transaction_hash)
+        # index = blocks[0][1]+1
+        # db.execute(
+        #     'UPDATE individual_block SET hash1 = ?, chained_status = ?'
+        #     ' WHERE id = ?',
+        #     (json_transactions_in_block, 'UNCHAINED', index)
+        # )
+        # db.commit()
+
     else: 
         # appending works 
         transactions_in_block.append(current_transaction_hash)
@@ -66,18 +76,18 @@ def add_to_block(current_transaction_hash):
         )
         db.commit()
 
-def next_block_intialisation():
+def next_block_intialisation(transaction, db):
     """ Starts next block. """
-    next_list = []
+
+    next_list = [transaction]
     json_next_list = json.dumps(next_list)
-    db = get_db()
+    # db = get_db()
     db.execute(
         'INSERT INTO individual_block (hash1, chained_status)'
         ' VALUES (?, ?)',
         (json_next_list, 'UNCHAINED')
     )
     db.commit()
-
 
 def blockchaining():
     """ Initialize mining operation. """

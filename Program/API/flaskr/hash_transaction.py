@@ -2,7 +2,6 @@ from hashlib import sha512
 import json
 from flaskr.db import get_db
 import time
-from flaskr.blockchain import next_block_intialisation 
 
 class SingleTransaction:
     def __init__(self, post_id, giver_of_loan, reciever_of_loan, loan_amount, transaction_time):
@@ -52,6 +51,9 @@ def hash_transac_fxn():
         (str(hashed_transac), id_)
     )
     db.commit()
+
+    # add to block 
+    add_to_block(hashed_transac)
 
 def genesis_block():
     """ Creates the gensis block for the blockchain. """
@@ -112,5 +114,13 @@ def genesis_block():
     db.commit()
 
     # start next block
-    next_block_intialisation()
+    # next_block_intialisation()
+    next_list = []
+    json_next_list = json.dumps(next_list)
+    db.execute(
+        'INSERT INTO individual_block (hash1, chained_status)'
+        ' VALUES (?, ?)',
+        (json_next_list, 'UNCHAINED')
+    )
+    db.commit()
     
