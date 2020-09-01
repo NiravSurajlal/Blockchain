@@ -7,7 +7,10 @@
   {% endif %}
   {% if g.user %}
   <a class="action" href="{{ url_for('info.mypages') }}">My Pages</a>
-{% endif %}
+  {% endif %}
+  {% if g.user %}
+  <a class="action" href="{{ url_for('mine.check_count') }}">Mining</a>
+  {% endif %}  
 {% endblock %}
 
 {% block content %}

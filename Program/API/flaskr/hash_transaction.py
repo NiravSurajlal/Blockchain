@@ -92,9 +92,9 @@ def genesis_block():
     x = json.dumps(lst_dum)
 
     db.execute(
-        'INSERT INTO individual_block (hash1, prev_block_hash, filled_time, chained_status)'
-        ' VALUES (?, ?, ?, ?)',
-        (x, '0', time.time(), 'UNCHAINED')
+        'INSERT INTO individual_block (hash1, prev_block_hash, filled_time, chained_status, nonce)'
+        ' VALUES (?, ?, ?, ?, ?)',
+        (x, '0', time.time(), 'UNCHAINED', 0)
     )
     db.commit()
 
@@ -119,9 +119,9 @@ def genesis_block():
     next_list = []
     json_next_list = json.dumps(next_list)
     db.execute(
-        'INSERT INTO individual_block (hash1, chained_status)'
-        ' VALUES (?, ?)',
-        (json_next_list, 'UNCHAINED')
+        'INSERT INTO individual_block (hash1, chained_status, nonce)'
+        ' VALUES (?, ?, ?)',
+        (json_next_list, 'UNCHAINED', 0)
     )
     db.commit()
     

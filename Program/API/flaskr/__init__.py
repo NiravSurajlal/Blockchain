@@ -39,6 +39,9 @@ def create_app(test_config=None):
 
     from . import info 
     app.register_blueprint(info.bp) 
+
+    from . import mine 
+    app.register_blueprint(mine.bp) 
     
     return app
  

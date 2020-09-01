@@ -50,7 +50,8 @@ CREATE TABLE individual_block (
   hash1 TEXT,
   prev_block_hash TEXT,
   filled_time FLOAT,
-  chained_status TEXT
+  chained_status TEXT,
+  nonce INTEGER
 );
 
 CREATE TABLE blockchain (

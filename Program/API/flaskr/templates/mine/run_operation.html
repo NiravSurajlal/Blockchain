@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Running Mining Operation{% endblock %}</h1>
+  {% if g.user %}
+  <a class="action" href="{{ url_for('blog.index') }}">Back</a>
+  {% endif %}   
+{% endblock %}
+
+{% block content %}
+    <article class="post">
+      <header>
+        <div>
+          <h1>No of Blocks: {{ status }}</h1> 
+          <h1>No of Blocks in chain: </h1>       
+        </div>
+      </header>
+    </article>
+{% endblock %}
